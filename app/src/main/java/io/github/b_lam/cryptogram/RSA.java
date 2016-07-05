@@ -12,18 +12,24 @@ public class RSA {
 
     private int bitlen = 1024;
 
-    /** Create an instance that can encrypt using someone elses public key. */
+    /** Create an instance that can encrypt using someone else's public key. */
     public RSA(BigInteger newn, BigInteger newe) {
         n = newn;
         e = newe;
+    }
+
+    public RSA(BigInteger newn, BigInteger newe, BigInteger newd){
+        n = newn;
+        e = newe;
+        d = newd;
     }
 
     /** Create an instance that can both encrypt and decrypt. */
     public RSA(int bits) {
         bitlen = bits;
         SecureRandom r = new SecureRandom();
-        BigInteger p = new BigInteger(bitlen / 2, 100, r);
-        BigInteger q = new BigInteger(bitlen / 2, 100, r);
+        BigInteger p = BigInteger.probablePrime(bitlen / 2, r);
+        BigInteger q = BigInteger.probablePrime(bitlen / 2, r);
         n = p.multiply(q);
         BigInteger phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
         e = new BigInteger("70001");
@@ -60,5 +66,9 @@ public class RSA {
 
     public BigInteger getN() {
         return n;
+    }
+
+    public BigInteger getD() {
+        return d;
     }
 }

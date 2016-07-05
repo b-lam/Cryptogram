@@ -51,7 +51,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textViewCipher"
-        android:hint="Encrypted Message"
             android:textIsSelectable="true"
             android:textColor="@color/abc_primary_text_material_light" />
 

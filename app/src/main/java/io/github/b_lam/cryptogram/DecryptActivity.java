@@ -1,6 +1,8 @@
 package io.github.b_lam.cryptogram;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigInteger;
@@ -18,6 +21,10 @@ import java.math.BigInteger;
 public class DecryptActivity extends AppCompatActivity {
 
     private RSA rsa;
+    private String unencryptedText;
+    private String encryptedText;
+    EditText cipherMessage;
+    TextView message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +34,42 @@ public class DecryptActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final EditText nVal = (EditText) findViewById(R.id.editTextN);
+        final EditText eVal = (EditText) findViewById(R.id.editTextE);
         final EditText dVal = (EditText) findViewById(R.id.editTextD);
         Button btnDecrypt = (Button) findViewById(R.id.btnDecrypt);
+        Button btnSave = (Button) findViewById(R.id.btnSave);
+        Button btnLoad = (Button) findViewById(R.id.btnLoad);
+        message = (TextView) findViewById(R.id.textViewMessage);
+        cipherMessage = (EditText) findViewById(R.id.editTextCipher);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences = getSharedPreferences("keys", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("nKey", nVal.getText().toString());
+                editor.putString("eKey", eVal.getText().toString());
+                editor.putString("dKey", dVal.getText().toString());
+                editor.apply();
+            }
+        });
+
+        btnLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences = getSharedPreferences("keys", Context.MODE_PRIVATE);
+                nVal.setText(sharedPreferences.getString("nKey", ""));
+                eVal.setText(sharedPreferences.getString("eKey", ""));
+                dVal.setText(sharedPreferences.getString("dKey", ""));
+
+            }
+        });
 
         btnDecrypt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(nVal.getText().length() != 0 && dVal.getText().length() != 0){
+                    rsa = new RSA(new BigInteger(nVal.getText().toString()), new BigInteger(eVal.getText().toString()), new BigInteger(dVal.getText().toString()));
                     decryptText();
                 }else{
                     Toast.makeText(getApplicationContext(), "Please enter a key", Toast.LENGTH_SHORT).show();
@@ -45,14 +81,25 @@ public class DecryptActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Generating new keys...", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
+                rsa = new RSA(600);
+                rsa.generateKeys();
+                nVal.setText(rsa.getN().toString());
+                eVal.setText(rsa.getE().toString());
+                dVal.setText(rsa.getD().toString());
             }
         });
     }
 
     public void decryptText(){
-
+        if(cipherMessage.getText().toString().trim().length() != 0) {
+            encryptedText = cipherMessage.getText().toString();
+            unencryptedText = rsa.decrypt(encryptedText);
+            message.setText(unencryptedText);
+        }else{
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -65,6 +112,7 @@ public class DecryptActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.encrypt:
+//                startActivity(new Intent(this, EncryptActivity.class));
                 finish();
                 return true;
         }

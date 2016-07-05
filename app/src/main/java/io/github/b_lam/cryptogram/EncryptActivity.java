@@ -45,24 +45,24 @@ public class EncryptActivity extends AppCompatActivity {
                     rsa = new RSA(new BigInteger(nVal.getText().toString()), new BigInteger(eVal.getText().toString()));
                     encryptText();
                 }else{
-                    Toast.makeText(getApplicationContext(), "Please enter or generate a key", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please enter a key", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Generating new keys...", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                rsa = new RSA(1024);
-                rsa.generateKeys();
-                nVal.setText(rsa.getN().toString());
-                eVal.setText(rsa.getE().toString());
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Generating new keys...", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//                rsa = new RSA(1024);
+//                rsa.generateKeys();
+//                nVal.setText(rsa.getN().toString());
+//                eVal.setText(rsa.getE().toString());
+//            }
+//        });
 
 
     }
@@ -71,7 +71,7 @@ public class EncryptActivity extends AppCompatActivity {
         if(message.getText().toString().trim().length() != 0) {
             unencryptedText = message.getText().toString();
             encryptedText = rsa.encrypt(unencryptedText);
-            cipherMessage.setText(encryptedText.toString());
+            cipherMessage.setText(encryptedText);
         }else{
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
         }
