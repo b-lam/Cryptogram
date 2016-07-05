@@ -57,6 +57,7 @@ public class EncryptActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Generating new keys...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                rsa = new RSA(1024);
                 rsa.generateKeys();
                 nVal.setText(rsa.getN().toString());
                 eVal.setText(rsa.getE().toString());

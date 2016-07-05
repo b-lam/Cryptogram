@@ -52,7 +52,7 @@ public class DecryptActivity extends AppCompatActivity {
     }
 
     public void decryptText(){
-        
+
     }
 
     @Override
