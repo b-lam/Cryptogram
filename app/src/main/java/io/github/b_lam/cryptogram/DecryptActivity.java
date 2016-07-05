@@ -1,7 +1,8 @@
 package io.github.b_lam.cryptogram;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -51,6 +52,10 @@ public class DecryptActivity extends AppCompatActivity {
                 editor.putString("eKey", eVal.getText().toString());
                 editor.putString("dKey", dVal.getText().toString());
                 editor.apply();
+                String publicKey = "n = " + nVal.getText().toString() + "\ne = " + eVal.getText().toString() + "\nd = " + dVal.getText().toString();
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("publicKey", publicKey);
+                clipboard.setPrimaryClip(clip);
             }
         });
 
@@ -112,7 +117,6 @@ public class DecryptActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.encrypt:
-//                startActivity(new Intent(this, EncryptActivity.class));
                 finish();
                 return true;
         }

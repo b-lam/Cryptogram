@@ -2,8 +2,6 @@ package io.github.b_lam.cryptogram;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -47,23 +45,8 @@ public class EncryptActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(getApplicationContext(), "Please enter a key", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Generating new keys...", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//                rsa = new RSA(1024);
-//                rsa.generateKeys();
-//                nVal.setText(rsa.getN().toString());
-//                eVal.setText(rsa.getE().toString());
-//            }
-//        });
-
 
     }
 
