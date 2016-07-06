@@ -92,7 +92,18 @@ public class DecryptActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Generating new keys...", Snackbar.LENGTH_LONG).show();
-                generateKeys();
+                new Thread(new Runnable() {
+                    public void run() {
+                        generateKeys();
+                        nVal.post(new Runnable() {
+                            public void run() {
+                                nVal.setText(rsa.getN().toString());
+                                eVal.setText(rsa.getE().toString());
+                                dVal.setText(rsa.getD().toString());
+                            }
+                        });
+                    }
+                }).start();
             }
         });
     }
@@ -100,9 +111,6 @@ public class DecryptActivity extends AppCompatActivity {
     public void generateKeys(){
         rsa = new RSA(2048);
         rsa.generateKeys();
-        nVal.setText(rsa.getN().toString());
-        eVal.setText(rsa.getE().toString());
-        dVal.setText(rsa.getD().toString());
     }
 
     public void decryptText(){
