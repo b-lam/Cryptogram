@@ -30,6 +30,7 @@ public class DecryptActivity extends AppCompatActivity {
     EditText nVal;
     EditText eVal;
     EditText dVal;
+    AlertDialog.Builder dialogBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +51,7 @@ public class DecryptActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences = getSharedPreferences("keys", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("nKey", nVal.getText().toString());
-                editor.putString("eKey", eVal.getText().toString());
-                editor.putString("dKey", dVal.getText().toString());
-                editor.apply();
-                String publicKey = "n = " + nVal.getText().toString() + "\ne = " + eVal.getText().toString() + "\nd = " + dVal.getText().toString();
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("publicKey", publicKey);
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(getApplicationContext(), "Copied keys to clipboard", Toast.LENGTH_SHORT).show();
+                saveDialog();
             }
         });
 
@@ -142,4 +133,35 @@ public class DecryptActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void saveDialog(){
+        dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setMessage("Are you sure you want to save these keys?");
+
+        dialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(getApplicationContext(), "The keys were not saved", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                SharedPreferences sharedPreferences = getSharedPreferences("keys", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("nKey", nVal.getText().toString());
+                editor.putString("eKey", eVal.getText().toString());
+                editor.putString("dKey", dVal.getText().toString());
+                editor.apply();
+                String publicKey = "n = " + nVal.getText().toString() + "\ne = " + eVal.getText().toString() + "\nd = " + dVal.getText().toString();
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("publicKey", publicKey);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getApplicationContext(), "Copied keys to clipboard", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        AlertDialog dialogBox = dialogBuilder.create();
+        dialogBox.show();
+    }
 }
