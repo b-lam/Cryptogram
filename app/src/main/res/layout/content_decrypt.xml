@@ -24,7 +24,7 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/editTextN"
-            android:hint="n-Key" />
+            android:hint="Your n-Key" />
 
         <EditText
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/editTextE"
-            android:hint="e-Key" />
+            android:hint="Your e-Key" />
 
         <EditText
             android:layout_width="fill_parent"
@@ -40,7 +40,7 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/editTextD"
-            android:hint="d-Key" />
+            android:hint="Your d-Key" />
 
         <LinearLayout
             android:orientation="horizontal"

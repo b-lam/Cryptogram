@@ -25,7 +25,7 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/editTextN"
-        android:hint="n-Key" />
+        android:hint="Someone&apos;s n-Key" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -33,7 +33,7 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/editTextE"
-        android:hint="e-Key" />
+        android:hint="Someone&apos;s e-Key" />
 
         <EditText
             android:layout_width="fill_parent"

@@ -51,7 +51,6 @@ public class RSA {
             decodedMessage = decodedMessage.concat(String.valueOf((char)Integer.parseInt(letter)));
         }
         return decodedMessage;
-
 //        return new String((new BigInteger(message)).modPow(d, n).toByteArray());
     }
 
