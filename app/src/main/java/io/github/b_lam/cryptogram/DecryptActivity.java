@@ -91,7 +91,8 @@ public class DecryptActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Generating new keys...", Snackbar.LENGTH_LONG).show();
+                final Snackbar snackbar = Snackbar.make(view, "Generating new keys...", Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
                 new Thread(new Runnable() {
                     public void run() {
                         generateKeys();
@@ -100,6 +101,8 @@ public class DecryptActivity extends AppCompatActivity {
                                 nVal.setText(rsa.getN().toString());
                                 eVal.setText(rsa.getE().toString());
                                 dVal.setText(rsa.getD().toString());
+                                snackbar.dismiss();
+
                             }
                         });
                     }
