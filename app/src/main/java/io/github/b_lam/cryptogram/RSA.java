@@ -10,18 +10,19 @@ public class RSA {
 
     private BigInteger n, d, e;
 
-    private int bitlen = 1024;
+    private int bitlen = 2048;
 
     /** Create an instance that can encrypt using someone else's public key. */
-    public RSA(BigInteger newn, BigInteger newe) {
-        n = newn;
-        e = newe;
+    public RSA(BigInteger newN, BigInteger newE) {
+        n = newN;
+        e = newE;
     }
 
-    public RSA(BigInteger newn, BigInteger newe, BigInteger newd){
-        n = newn;
-        e = newe;
-        d = newd;
+    /** Create an instance to decrypt using a given private key. */
+    public RSA(BigInteger newN, BigInteger newE, BigInteger newD){
+        n = newN;
+        e = newE;
+        d = newD;
     }
 
     /** Create an instance that can both encrypt and decrypt. */
@@ -40,17 +41,37 @@ public class RSA {
     }
 
     public String decrypt(String message){
-        return new String((new BigInteger(message)).modPow(d, n).toByteArray());
+        String decryptedMessage = (new BigInteger(message)).modPow(d,n).toString();
+        String decodedMessage = "";
+        while(decryptedMessage.length()%3 != 0){
+            decryptedMessage = "0".concat(decryptedMessage);
+        }
+        for(int i = 0; i < decryptedMessage.length(); i+=3){
+            String letter = "" + decryptedMessage.charAt(i) + decryptedMessage.charAt(i+1) + decryptedMessage.charAt(i+2);
+            decodedMessage = decodedMessage.concat(String.valueOf((char)Integer.parseInt(letter)));
+        }
+        return decodedMessage;
+
+//        return new String((new BigInteger(message)).modPow(d, n).toByteArray());
     }
 
     public String encrypt(String message){
-        return (new BigInteger(message.getBytes())).modPow(e, n).toString();
+        String encodedMessage = "";
+        for(int i = 0; i < message.length(); i++){
+            String letter = String.valueOf((int)message.charAt(i));
+            while(letter.length() < 3){
+                letter = "0".concat(letter);
+            }
+            encodedMessage = encodedMessage.concat(letter);
+        }
+        return (new BigInteger(encodedMessage).modPow(e,n)).toString();
+//        return (new BigInteger(message.getBytes())).modPow(e, n).toString();
     }
 
     public void generateKeys(){
         SecureRandom r = new SecureRandom();
-        BigInteger p = new BigInteger(bitlen / 2, 100, r);
-        BigInteger q = new BigInteger(bitlen / 2, 100, r);
+        BigInteger p = BigInteger.probablePrime(bitlen / 2, r);
+        BigInteger q = BigInteger.probablePrime(bitlen / 2, r);
         n = p.multiply(q);
         BigInteger phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
         e = new BigInteger("70001");

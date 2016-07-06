@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.math.BigInteger;
 
 public class EncryptActivity extends AppCompatActivity {
@@ -35,7 +34,6 @@ public class EncryptActivity extends AppCompatActivity {
         message = (EditText) findViewById(R.id.editTextMessage);
         cipherMessage = (TextView) findViewById(R.id.textViewCipher);
 
-
         btnEncrypt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +45,6 @@ public class EncryptActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     public void encryptText(){
@@ -74,7 +71,6 @@ public class EncryptActivity extends AppCompatActivity {
                 startActivity(new Intent(this, DecryptActivity.class));
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

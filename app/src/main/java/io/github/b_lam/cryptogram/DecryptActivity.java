@@ -3,10 +3,12 @@ package io.github.b_lam.cryptogram;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.math.BigInteger;
 
 public class DecryptActivity extends AppCompatActivity {
@@ -26,6 +27,9 @@ public class DecryptActivity extends AppCompatActivity {
     private String encryptedText;
     EditText cipherMessage;
     TextView message;
+    EditText nVal;
+    EditText eVal;
+    EditText dVal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +38,9 @@ public class DecryptActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final EditText nVal = (EditText) findViewById(R.id.editTextN);
-        final EditText eVal = (EditText) findViewById(R.id.editTextE);
-        final EditText dVal = (EditText) findViewById(R.id.editTextD);
+        nVal = (EditText) findViewById(R.id.editTextN);
+        eVal = (EditText) findViewById(R.id.editTextE);
+        dVal = (EditText) findViewById(R.id.editTextD);
         Button btnDecrypt = (Button) findViewById(R.id.btnDecrypt);
         Button btnSave = (Button) findViewById(R.id.btnSave);
         Button btnLoad = (Button) findViewById(R.id.btnLoad);
@@ -56,6 +60,7 @@ public class DecryptActivity extends AppCompatActivity {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("publicKey", publicKey);
                 clipboard.setPrimaryClip(clip);
+                Toast.makeText(getApplicationContext(), "Copied keys to clipboard", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -66,7 +71,7 @@ public class DecryptActivity extends AppCompatActivity {
                 nVal.setText(sharedPreferences.getString("nKey", ""));
                 eVal.setText(sharedPreferences.getString("eKey", ""));
                 dVal.setText(sharedPreferences.getString("dKey", ""));
-
+                Toast.makeText(getApplicationContext(), "Loaded previously saved keys", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -86,15 +91,18 @@ public class DecryptActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Generating new keys...", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-                rsa = new RSA(600);
-                rsa.generateKeys();
-                nVal.setText(rsa.getN().toString());
-                eVal.setText(rsa.getE().toString());
-                dVal.setText(rsa.getD().toString());
+                Snackbar.make(view, "Generating new keys...", Snackbar.LENGTH_LONG).show();
+                generateKeys();
             }
         });
+    }
+
+    public void generateKeys(){
+        rsa = new RSA(2048);
+        rsa.generateKeys();
+        nVal.setText(rsa.getN().toString());
+        eVal.setText(rsa.getE().toString());
+        dVal.setText(rsa.getD().toString());
     }
 
     public void decryptText(){
@@ -120,7 +128,6 @@ public class DecryptActivity extends AppCompatActivity {
                 finish();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
